@@ -14,6 +14,10 @@ public class GUI extends JFrame {
     private JComboBox<Integer> comboBox;
     private JTextField textField;
     private JPanel drawPane;
+    private JPanel scrollPane;
+    private JPanel verticalPane;
+    private JScrollBar verticalScroll;
+    private JScrollBar horizontalScroll;
     private BufferedImage img;
     private JButton[][] matrix;
     private final List<Color> colors;
@@ -42,6 +46,8 @@ public class GUI extends JFrame {
         String currentColor = comboBox.getSelectedItem().toString();
         for (JButton[] buttons:matrix) {
             for (JButton b:buttons) {
+                if(b.getText().equals(""))return;
+                if(b.getBackground()==Color.LIGHT_GRAY)b.setBackground(Color.gray);
                 if(b.getText().equals(currentColor))b.setBackground(Color.LIGHT_GRAY);
             }
         }
@@ -114,7 +120,6 @@ public class GUI extends JFrame {
             }
         }
         drawPane.revalidate();
-        setSize(img.getWidth()*56+20,img.getHeight()*32+50);
     }
     private void onCancel() {
         System.out.println(getHeight()+" "+getWidth());
@@ -123,7 +128,7 @@ public class GUI extends JFrame {
 
     public static void main(String[] args) throws IOException {
         GUI dialog = new GUI();
-        dialog.setSize(600,600);
+        dialog.setSize(650,650);
         dialog.setVisible(true);
     }
 
