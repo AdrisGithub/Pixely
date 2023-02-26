@@ -17,6 +17,7 @@ public class GUI extends JFrame {
     private BufferedImage img;
     private JButton[][] matrix;
     private final List<Color> colors;
+    private boolean pickedImage;
 
     public GUI() throws IOException {
         setTitle("PixelY");
@@ -33,11 +34,24 @@ public class GUI extends JFrame {
         });
         colors = new ArrayList<>();
         mainPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        comboBox.addActionListener(e -> highlightSameColor());
+    }
+
+    private void highlightSameColor() {
+        if(comboBox.getSelectedItem()==null)return;
+        String currentColor = comboBox.getSelectedItem().toString();
+        for (JButton[] buttons:matrix) {
+            for (JButton b:buttons) {
+                if(b.getText().equals(currentColor))b.setBackground(Color.LIGHT_GRAY);
+            }
+        }
     }
 
     private void onOK() {
         try{
+            if(pickedImage)return;
             img = ImageIO.read(new File(textField.getText()));
+            pickedImage = true;
             initMatrix();
         }catch(IOException io){
             textField.setText("Couldn't find the Image");
@@ -56,6 +70,7 @@ public class GUI extends JFrame {
         }
         fillComboBox();
         fillDrawPane();
+        highlightSameColor();
     }
 
     private void fillComboBox() {
