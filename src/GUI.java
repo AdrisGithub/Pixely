@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class GUI extends JDialog {
+public class GUI extends JFrame {
     private JPanel mainPane;
     private JButton searchButton;
     private JComboBox<Integer> comboBox;
@@ -18,16 +18,13 @@ public class GUI extends JDialog {
     private JButton[][] matrix;
     private final List<Color> colors;
 
-    public static boolean mousePressed = false;
-
-    public GUI() {
-
+    public GUI() throws IOException {
+        setTitle("PixelY");
+        setIconImage(ImageIO.read(new File("resources/icon.png")));
         setContentPane(mainPane);
-        setModal(true);
+        //setModal(true);
         getRootPane().setDefaultButton(searchButton);
-
         searchButton.addActionListener(e -> onOK());
-
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -36,18 +33,6 @@ public class GUI extends JDialog {
         });
         colors = new ArrayList<>();
         mainPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        drawPane.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                mousePressed = true;
-                System.out.println("Mouse gedrückt");
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                mousePressed = false;
-                System.out.println("Mouse nicht gedrückt");
-            }
-        });
     }
 
     private void onOK() {
@@ -67,17 +52,6 @@ public class GUI extends JDialog {
                 matrix[i][j] = new JButton(addColor(i,j));
                 matrix[i][j].setBackground(Color.gray);
                 matrix[i][j].addActionListener(e -> changeBackground(finalI,finalJ,matrix[finalI][finalJ]));
-                matrix[i][j].addMouseMotionListener(new MouseMotionListener() {
-                    @Override
-                    public void mouseDragged(MouseEvent e) {
-                        changeBackground(finalI,finalJ,matrix[finalI][finalJ]);
-                    }
-
-                    @Override
-                    public void mouseMoved(MouseEvent e) {
-                        if(mousePressed) changeBackground(finalI,finalJ,matrix[finalI][finalJ]);
-                    }
-                });
             }
         }
         fillComboBox();
@@ -110,8 +84,7 @@ public class GUI extends JDialog {
         }else{
             button.setBackground(Color.DARK_GRAY);
         }
-        drawPane.revalidate();
-        button.revalidate();
+        button.setSelected(false);
     }
 
     private boolean lastColor(String title) {
@@ -133,11 +106,10 @@ public class GUI extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         GUI dialog = new GUI();
         dialog.setSize(600,600);
         dialog.setVisible(true);
-        dialog.setResizable(false);
     }
 
     private void createUIComponents() {
