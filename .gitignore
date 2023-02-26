@@ -1,5 +1,7 @@
 ### IntelliJ IDEA ###
 out/
+resources/
+.idea/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
@@ -11,6 +13,7 @@ out/
 .settings
 .springBeans
 .sts4-cache
+.iml
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
